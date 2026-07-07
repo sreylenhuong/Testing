@@ -28,7 +28,6 @@
   top: 0;
   height: var(--card-h);
   border-radius: 2px;
-  isolation: isolate;
   background:
     radial-gradient(ellipse at 18% 10%, rgba(255,255,255,.46) 0%, rgba(255,255,255,0) 36%),
     radial-gradient(ellipse at 84% 92%, rgba(188,112,103,.18) 0%, rgba(188,112,103,0) 38%),
@@ -42,6 +41,16 @@
     inset 1px 0 0 rgba(255,255,255,.24),
     inset -1px 0 0 rgba(138,76,69,.06);
   overflow: hidden;
+}
+
+/* Only the base still needs its own stacking context, since its texture
+   layer uses mix-blend-mode. The covers no longer blend, so isolating them
+   is unnecessary — and isolation on an element inside a preserve-3d scene
+   is a known trigger for Safari falling back to flat z-index stacking
+   instead of true 3D depth sorting, which is what hides the cards behind
+   a rotated-open cover on iPhone specifically. */
+.base {
+  isolation: isolate;
 }
 
 .base::before {
@@ -164,6 +173,10 @@
   transform: rotateY(0deg);
 }
 
+.stage.is-open .cover {
+  z-index: 2;
+}
+
 .stage.is-open .left-cover {
   transform: rotateY(-178deg);
 }
@@ -174,6 +187,23 @@
 
 .stage.is-open .right-cover {
   transform: rotateY(178deg);
+}
+
+/*
+  Safari-only fix: WebKit has a known performance bug where border-radius +
+  overflow:hidden on an element that's rotating in 3D forces it off the GPU
+  compositing path onto CPU rasterization every frame — this is the specific
+  reason the fold can be smooth on Android and janky on iPhone, since all
+  iOS browsers use WebKit under the hood. The 2px radius here is subtle
+  enough that dropping it on Safari only is a worthwhile trade for a smooth
+  animation. (-webkit-touch-callout is a Safari/iOS-only property, so this
+  block is invisible to Chrome/Android.)
+*/
+@supports (-webkit-touch-callout: none) {
+  .cover {
+    overflow: visible;
+    border-radius: 0;
+  }
 }
 
 /* Full cover print is clipped into two halves by the covers. */
