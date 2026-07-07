@@ -3,139 +3,264 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chanda & Dalin Wedding Invitation</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Project Tulip | Wedding Invitation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:wght@400;500;600;700&family=EB+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/folder.css" />
+  <link rel="stylesheet" href="css/cards.css" />
+  <link rel="stylesheet" href="css/typography.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
 </head>
-
 <body>
-  <div class="floating-petals"></div>
+  <main class="app">
+    <section class="stage" id="stage" aria-label="Digital wedding invitation">
+      <div class="folder-system" id="folderSystem">
+        <div class="base">
+          <div class="card-stack" id="cardStack">
+            <article class="card cover-card" data-position="active">
+              <p class="eyebrow">A Celebration of Love</p>
 
-  <section class="opening-screen" id="openingScreen">
-    <div class="envelope" id="envelope">
-      <div class="card-preview">
-        <p>Wedding Invitation</p>
-        <h1>Chanda<br><span>&</span><br>Dalin</h1>
-      </div>
+              <div class="name-lockup" aria-label="Chanda and Dalin">
+                <span class="bride-name bride-name-top">Chanda</span>
+                <img class="rings-mark" src="assets/images/rings-card1.png" alt="Two wedding rings" decoding="async" />
+                <span class="bride-name bride-name-bottom">Dalin</span>
+              </div>
 
-      <div class="door door-left"></div>
-      <div class="door door-right"></div>
+              <div class="date-lockup" aria-label="Saturday, 12 September 2026">
+                <div class="date-main-row">
+                  <span class="date-side date-weekday">Saturday</span>
+                  <span class="date-number">12</span>
+                  <span class="date-side date-month">September</span>
+                </div>
+                <span class="date-year">2026</span>
+              </div>
 
-      <button class="wax-seal" id="openButton">
-        <span>C ♥ D</span>
-      </button>
-    </div>
+              <div class="card-signature" aria-hidden="true">
+                <img src="assets/images/cd-logo-transparent.png" alt="" decoding="async" />
+              </div>
+            </article>
 
-    <p class="tap-text">Tap the seal to open</p>
-  </section>
+            <article class="card stationery-card invitation-card" data-position="next">
+              <header class="stationery-header">
+                <span class="stationery-number" aria-hidden="true">01</span>
+                <h2 class="stationery-title">INVITATION</h2>
+              </header>
 
-  <main class="invitation-site hidden" id="invitationSite">
-    <section class="hero section">
-      <p class="eyebrow">Wedding Invitation</p>
-      <h1>Chanda <span>&</span> Dalin</h1>
-      <p class="date">12 September 2026</p>
-      <p class="location">Gothenburg Restaurant, Hamilton</p>
-    </section>
+              <div class="stationery-hero">
+                Love has brought us here.
+              </div>
 
-    <section class="message section">
-      <p>
-        Together with our families, we warmly invite you to celebrate our wedding.
-      </p>
-    </section>
+              <div class="stationery-body invitation-body">
+                <p>Together with our family and friends,</p>
+                <p class="stationery-emphasis invitation-emphasis">we invite you to celebrate<br>our wedding day.</p>
+                <p>We can't wait to share this<br>special evening with you.</p>
+              </div>
 
-    <section class="details section">
-      <h2>Wedding Details</h2>
+              <div class="stationery-divider" aria-hidden="true">✦</div>
 
-      <div class="detail-card">
-        <p class="label">Date</p>
-        <p>Saturday, 12 September 2026</p>
-      </div>
+              <div class="card-signature" aria-hidden="true">
+                <img src="assets/images/cd-logo-transparent.png" alt="" decoding="async" />
+              </div>
+            </article>
 
-      <div class="detail-card">
-        <p class="label">Time</p>
-        <p>6:00 PM</p>
-      </div>
+            <article class="card stationery-card details-card" data-position="hidden-next">
+              <header class="stationery-header">
+                <span class="stationery-number" aria-hidden="true">02</span>
+                <h2 class="stationery-title">WEDDING DETAILS</h2>
+              </header>
 
-      <div class="detail-card">
-        <p class="label">Venue</p>
-        <p>Gothenburg Restaurant<br>Hamilton, New Zealand</p>
-      </div>
-    </section>
+              <div class="stationery-hero">
+                The Celebration
+              </div>
 
-    <section class="countdown section">
-      <h2>Countdown</h2>
+              <div class="stationery-body details-body" aria-label="Wedding details">
+                <p class="ceremony-time">6:45 <br> PM</p>
 
-      <div class="countdown-box">
-        <div>
-          <span id="days">00</span>
-          <p>Days</p>
+                <p class="detail-day">Saturday</p>
+
+                <p class="detail-date">12 September 2026</p>
+
+                <span class="detail-separator" aria-hidden="true"></span>
+
+                <p class="detail-venue">Iguana Garden Bar</p>
+
+                <p class="detail-location">Hamilton, New Zealand</p>
+              </div>
+
+              <div class="stationery-divider" aria-hidden="true">✦</div>
+
+              <div class="card-signature" aria-hidden="true">
+                <img src="assets/images/cd-logo-transparent.png" alt="" decoding="async" />
+              </div>
+            </article>
+
+            <article class="card stationery-card timeline-card" data-position="hidden-next">
+              <header class="stationery-header">
+                <span class="stationery-number" aria-hidden="true">03</span>
+                <h2 class="stationery-title">TIMELINE</h2>
+              </header>
+
+              <div class="stationery-hero">
+                Our Evening
+              </div>
+
+              <div class="stationery-body timeline-body" aria-label="Wedding evening timeline">
+                <div class="timeline-item">
+                  <span class="timeline-time">6:00 PM</span>
+                  <span class="timeline-dot" aria-hidden="true"></span>
+                  <span class="timeline-title">Guest Arrival</span>
+                </div>
+                <div class="timeline-item">
+                  <span class="timeline-time">6:45 PM</span>
+                  <span class="timeline-dot" aria-hidden="true"></span>
+                  <span class="timeline-title">Ceremony</span>
+                </div>
+                <div class="timeline-item">
+                  <span class="timeline-time">7:15 PM</span>
+                  <span class="timeline-dot" aria-hidden="true"></span>
+                  <span class="timeline-title">Photos</span>
+                </div>
+                <div class="timeline-item">
+                  <span class="timeline-time">7:35 PM</span>
+                  <span class="timeline-dot" aria-hidden="true"></span>
+                  <span class="timeline-title">Dinner</span>
+                </div>
+                <div class="timeline-item">
+                  <span class="timeline-time">After</span>
+                  <span class="timeline-dot" aria-hidden="true"></span>
+                  <span class="timeline-title">Celebration</span>
+                </div>
+              </div>
+
+              <div class="stationery-divider" aria-hidden="true">✦</div>
+
+              <div class="card-signature" aria-hidden="true">
+                <img src="assets/images/cd-logo-transparent.png" alt="" decoding="async" />
+              </div>
+            </article>
+
+            <article class="card stationery-card venue-card" data-position="hidden-next">
+              <header class="stationery-header">
+                <span class="stationery-number" aria-hidden="true">04</span>
+                <h2 class="stationery-title">VENUE</h2>
+              </header>
+
+              <div class="stationery-hero">
+                Iguana Restaurant
+              </div>
+
+              <div class="stationery-body venue-body">
+                <p class="venue-location">Hamilton, New Zealand</p>
+
+                <a
+                  class="map-button"
+                  href="https://maps.app.goo.gl/2yXRKrnmHUAQH1Jx6"
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  View in Google Maps
+                </a>
+
+                <div class="finding-us">
+                  <h3 class="finding-title">Finding Us</h3>
+
+                  <p>Enter via <strong>Alexandra Street.</strong></p>
+
+                  <p>Follow the driveway to <strong>Iguana Restaurant.</strong></p>
+
+                  <p>Our celebration awaits <strong>inside.</strong></p>
+                </div>
+
+                <div class="venue-photo">
+                  <img src="assets/images/1000009035.jpg" alt="Iguana Restaurant entrance" loading="lazy" decoding="async" />
+                </div>
+              </div>
+
+              <div class="stationery-divider" aria-hidden="true">✦</div>
+
+              <div class="card-signature" aria-hidden="true">
+                <img src="assets/images/cd-logo-transparent.png" alt="" decoding="async" />
+              </div>
+            </article>
+
+            <article class="card stationery-card thank-you-card" data-position="hidden-next">
+              <header class="stationery-header">
+                <span class="stationery-number" aria-hidden="true">05</span>
+                <h2 class="stationery-title">THANK YOU</h2>
+              </header>
+
+              <div class="stationery-hero thank-you-hero">
+                We Can't Wait<br>
+                To See You!
+              </div>
+
+              <div class="stationery-body thank-you-body">
+                <p>Our wedding day<br>wouldn't be the same<br>without you.</p>
+
+                <div class="countdown" id="countdown" aria-label="Countdown to the wedding">
+                  <div><strong id="days">00</strong><span>Days</span></div>
+                  <div><strong id="hours">00</strong><span>Hours</span></div>
+                  <div><strong id="minutes">00</strong><span>Minutes</span></div>
+                  <div><strong id="seconds">00</strong><span>Seconds</span></div>
+                </div>
+              </div>
+
+              <div class="stationery-divider" aria-hidden="true">✦</div>
+
+              <div class="card-signature" aria-hidden="true">
+                <img src="assets/images/cd-logo-transparent.png" alt="" decoding="async" />
+              </div>
+            </article>
+
+            <article class="card image-card final-image-card" data-position="hidden-next" aria-label="Chanda and Dalin closing monogram">
+              <img class="final-monogram-image" src="assets/images/final-monogram-pink.png" alt="Chanda and Dalin wedding monogram" loading="lazy" decoding="async" />
+            </article>
+          </div>
         </div>
-        <div>
-          <span id="hours">00</span>
-          <p>Hours</p>
+
+        <div class="cover left-cover" aria-hidden="true">
+          <div class="cover-print">
+            <div class="cover-title">
+              <span>You Are Invited</span>
+            </div>
+            <div class="seal-print">
+              <img src="assets/images/wax-seal.png" alt="" decoding="async">
+            </div>
+          </div>
         </div>
-        <div>
-          <span id="minutes">00</span>
-          <p>Minutes</p>
+
+        <div class="cover right-cover" aria-hidden="true">
+          <div class="cover-print">
+            <div class="cover-title">
+              <span>You Are Invited</span>
+            </div>
+            <div class="seal-print">
+              <img src="assets/images/wax-seal.png" alt="" decoding="async">
+            </div>
+          </div>
         </div>
-        <div>
-          <span id="seconds">00</span>
-          <p>Seconds</p>
-        </div>
-      </div>
-    </section>
 
-    <section class="timeline section">
-      <h2>Evening Timeline</h2>
-
-      <div class="timeline-item">
-        <span>6:00 PM</span>
-        <p>Guest Arrival</p>
+        <button class="seal-trigger" id="openInvitation" aria-label="Open invitation" aria-expanded="false"></button>
       </div>
 
-      <div class="timeline-item">
-        <span>6:15 PM</span>
-        <p>Ceremony</p>
+      <div class="controls" aria-label="Card navigation">
+        <button class="card-click-zone prev-zone" id="prevZone" aria-label="Previous card by tapping left side"></button>
+        <button class="card-click-zone next-zone" id="nextZone" aria-label="Next card by tapping right side"></button>
+        <button id="prevCard" aria-label="Previous card">‹</button>
+        <span id="indicator">1 / 7</span>
+        <button id="nextCard" aria-label="Next card">›</button>
       </div>
 
-      <div class="timeline-item">
-        <span>6:45 PM</span>
-        <p>Photos</p>
-      </div>
-
-      <div class="timeline-item">
-        <span>7:15 PM</span>
-        <p>Dinner</p>
-      </div>
-
-      <div class="timeline-item">
-        <span>After Dinner</span>
-        <p>Celebration</p>
-      </div>
-    </section>
-
-    <section class="venue section">
-      <h2>Venue</h2>
-      <p>Gothenburg Restaurant, Hamilton</p>
-
-      <a
-        class="map-button"
-        href="https://www.google.com/maps/search/?api=1&query=Gothenburg+Restaurant+Hamilton"
-        target="_blank"
-      >
-        Open in Google Maps
-      </a>
-    </section>
-
-    <section class="thank-you section">
-      <p>
-        Thank you for celebrating this special day with us.
-        Your presence means so much to us.
-      </p>
-
-      <h2>C ♥ D</h2>
     </section>
   </main>
 
-  <script src="script.js"></script>
+  
+  <script src="js/folder.js"></script>
+  <script src="js/gesture.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/countdown.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
