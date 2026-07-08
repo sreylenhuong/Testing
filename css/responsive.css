@@ -46,6 +46,7 @@
     overflow: hidden;
     display: grid;
     place-items: center;
+    -webkit-perspective: 1400px;
     perspective: 1400px;
   }
 
@@ -57,11 +58,13 @@
   .folder-system {
     width: var(--card-w);
     height: var(--card-h);
-    transform: translateY(0) scale(1);
+    -webkit-transform: translate3d(0, 0, 0) scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
   }
 
   .stage.is-open .folder-system {
-    transform: translateY(-2px) scale(1);
+    -webkit-transform: translate3d(0, -2px, 0) scale(1);
+    transform: translate3d(0, -2px, 0) scale(1);
   }
 
   .base {
@@ -82,11 +85,15 @@
     left: 0;
     right: auto;
     bottom: 0;
-    transform: translateY(6px) scale(.99);
+    opacity: 1;
+    pointer-events: none;
+    -webkit-transform: translate3d(0, -10px, 0) scale(1);
+    transform: translate3d(0, -10px, 0) scale(1);
+    transition: none;
   }
 
-  .stage.is-open .card-stack {
-    transform: translateY(-10px) scale(1);
+  .stage.is-ready .card-stack {
+    pointer-events: auto;
   }
 
   .card {
@@ -156,33 +163,6 @@
   #indicator {
     bottom: 10px;
   }
-
-  /*
-    Performance: box-shadow and filter are expensive to animate on phone GPUs
-    (they force a repaint every frame, unlike transform/opacity which are
-    compositor-only). On mobile we keep the same visual states but stop
-    transitioning shadow/blur, so only transform + opacity animate.
-  */
-  .card {
-    transition:
-      transform .56s cubic-bezier(.18, .78, .16, 1),
-      opacity .42s ease;
-  }
-
-  .stage.is-open .card[data-position="next"],
-  .stage.is-open .card[data-position="prev"],
-  .stage.is-open[data-nav="next"] .card[data-position="prev"] {
-    filter: none;
-  }
-
-  .stage.is-closing .card[data-position],
-  .stage.is-open.is-closing .card[data-position] {
-    transition-duration: .26s;
-  }
-
-  .cover {
-    transition: transform 1.58s var(--ease-fold);
-  }
 }
 
 @media (max-width: 640px) and (orientation: landscape) {
@@ -190,8 +170,9 @@
     --card-w: min(92vw, 390px, calc((100svh - 20px) / 1.78));
   }
 
-  .stage.is-open .card-stack {
-    transform: translateY(-4px) scale(1);
+  .card-stack {
+    -webkit-transform: translate3d(0, -4px, 0) scale(1);
+    transform: translate3d(0, -4px, 0) scale(1);
   }
 
   .card {
@@ -223,5 +204,170 @@
 
   .venue-photo img {
     height: clamp(110px, 28svh, 150px);
+  }
+}
+
+/* ================================
+   iPhone/Safari clean animation model
+   One iPhone override only.
+
+   Safari was glitching because several old @supports blocks were fighting:
+   rotateY, opacity fades, scaleX folds, frozen cards, and delayed reveals.
+   This block keeps one simple model on iPhone:
+   - Cards are rendered from the beginning, but sit behind covers.
+   - Covers slide open/closed as flat physical panels.
+   - Card stack does not animate during cover movement.
+   - Cards stay rendered after closing; the closed covers conceal them.
+================================ */
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 640px) {
+    .stage,
+    .folder-system,
+    .base,
+    .cover,
+    .cover-print,
+    .seal-print,
+    .card-stack,
+    .card {
+      -webkit-transform-style: flat !important;
+      transform-style: flat !important;
+    }
+
+    .folder-system {
+      isolation: isolate;
+    }
+
+    .base {
+      z-index: 1;
+    }
+
+    .card-stack {
+      z-index: 4;
+      opacity: 1;
+      pointer-events: none;
+      -webkit-transform: translate3d(0, -10px, 0) scale(1);
+      transform: translate3d(0, -10px, 0) scale(1);
+      transition: none;
+      will-change: auto;
+    }
+
+    .cover {
+      z-index: 8;
+      opacity: 1 !important;
+      visibility: visible !important;
+      -webkit-backface-visibility: hidden !important;
+      backface-visibility: hidden !important;
+      -webkit-transform: translate3d(0, 0, 0) !important;
+      transform: translate3d(0, 0, 0) !important;
+      transition: transform .9s var(--ease-fold) !important;
+      will-change: transform;
+    }
+
+    .left-cover {
+      -webkit-transform-origin: left center !important;
+      transform-origin: left center !important;
+    }
+
+    .right-cover {
+      -webkit-transform-origin: right center !important;
+      transform-origin: right center !important;
+    }
+
+    /* Opening/ready state: cards are already inside, above the base, below covers. */
+    .stage.is-opening .card-stack,
+    .stage.is-open:not(.is-ready) .card-stack,
+    .stage.is-closing .card-stack {
+      opacity: 1 !important;
+      pointer-events: none !important;
+      -webkit-transform: translate3d(0, -10px, 0) scale(1) !important;
+      transform: translate3d(0, -10px, 0) scale(1) !important;
+      transition: none !important;
+    }
+
+    .stage.is-ready:not(.is-closing) .card-stack {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      -webkit-transform: translate3d(0, -10px, 0) scale(1) !important;
+      transform: translate3d(0, -10px, 0) scale(1) !important;
+      transition: none !important;
+    }
+
+    /* iPhone open state: flat sliding panels instead of Safari 3D rotation. */
+    .stage.is-open:not(.is-closing) .left-cover {
+      -webkit-transform: translate3d(-100%, 0, 0) !important;
+      transform: translate3d(-100%, 0, 0) !important;
+      box-shadow: -12px 14px 24px rgba(79, 48, 38, .10) !important;
+    }
+
+    .stage.is-open:not(.is-closing) .right-cover {
+      -webkit-transform: translate3d(100%, 0, 0) !important;
+      transform: translate3d(100%, 0, 0) !important;
+      box-shadow: 12px 14px 24px rgba(79, 48, 38, .10) !important;
+    }
+
+    /* Closing wins even while is-open remains on for card visibility. */
+    .stage.is-open.is-closing .left-cover,
+    .stage.is-closing .left-cover,
+    .stage.is-open.is-closing .right-cover,
+    .stage.is-closing .right-cover {
+      -webkit-transform: translate3d(0, 0, 0) !important;
+      transform: translate3d(0, 0, 0) !important;
+      box-shadow: none !important;
+    }
+
+    /* Freeze card layer during folder movement to avoid Card 1 first-open flicker. */
+    .stage.is-opening .card,
+    .stage.is-open:not(.is-ready) .card,
+    .stage.is-closing.is-open .card {
+      transition: none !important;
+      animation: none !important;
+      will-change: auto !important;
+    }
+
+    .stage.is-opening .card[data-position="active"],
+    .stage.is-open:not(.is-ready) .card[data-position="active"],
+    .stage.is-closing.is-open .card[data-position="active"] {
+      opacity: 1 !important;
+      -webkit-transform: translate3d(0, 0, 0) scale(1) rotateZ(0deg) !important;
+      transform: translate3d(0, 0, 0) scale(1) rotateZ(0deg) !important;
+    }
+
+    .stage.is-ready .card {
+      will-change: transform, opacity;
+    }
+
+    /* Lighter paper rendering on iPhone to reduce paint/compositing pressure. */
+    .card {
+      background:
+        radial-gradient(ellipse at 18% 12%, rgba(255,255,255,.64) 0%, rgba(255,255,255,0) 34%),
+        radial-gradient(ellipse at 82% 88%, rgba(229, 186, 190, .15) 0%, rgba(229, 186, 190, 0) 40%),
+        linear-gradient(145deg, #fffdf9 0%, #fff7f8 48%, #faeef1 100%);
+      border-color: rgba(196, 148, 153, .34);
+      box-shadow:
+        0 13px 26px rgba(83, 52, 55, .12),
+        0 2px 0 rgba(231, 205, 204, .72),
+        inset 0 1px 0 rgba(255,255,255,.82);
+      contain: layout paint;
+    }
+
+    .card::before,
+    .card.cover-card::before,
+    .image-card::before {
+      background-image: none !important;
+      background: none !important;
+      opacity: 0 !important;
+      mix-blend-mode: normal !important;
+    }
+
+    .card::after,
+    .image-card::after {
+      box-shadow: none !important;
+    }
+
+    .rings-mark,
+    .final-monogram-image {
+      filter: none !important;
+      mix-blend-mode: normal !important;
+    }
   }
 }

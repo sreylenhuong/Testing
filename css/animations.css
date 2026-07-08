@@ -3,24 +3,9 @@
 ================================ */
 
 @keyframes sealSparkle {
-  0%, 72%, 100% {
-    filter:
-      drop-shadow(0 8px 12px rgba(92, 55, 48, .22))
-      drop-shadow(0 2px 3px rgba(255, 255, 255, .24))
-      brightness(1);
-  }
-  78% {
-    filter:
-      drop-shadow(0 8px 12px rgba(92, 55, 48, .22))
-      drop-shadow(0 2px 3px rgba(255, 255, 255, .24))
-      brightness(1.18);
-  }
-  83% {
-    filter:
-      drop-shadow(0 8px 12px rgba(92, 55, 48, .22))
-      drop-shadow(0 2px 3px rgba(255, 255, 255, .24))
-      brightness(1);
-  }
+  0%, 72%, 100% { filter: brightness(1); }
+  78% { filter: brightness(1.18); }
+  83% { filter: brightness(1); }
 }
 
 @media (prefers-reduced-motion: reduce) {

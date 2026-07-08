@@ -13,13 +13,16 @@
   position: relative;
   width: var(--folder-open-w);
   height: var(--card-h);
+  -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
-  transform: translateY(6px) scale(.98);
+  -webkit-transform: translate3d(0, 6px, 0) scale(.98);
+  transform: translate3d(0, 6px, 0) scale(.98);
   transition: transform 1s var(--ease-luxury);
 }
 
 .stage.is-open .folder-system {
-  transform: translateY(0) scale(1);
+  -webkit-transform: translate3d(0, 0, 0) scale(1);
+  transform: translate3d(0, 0, 0) scale(1);
 }
 
 .base,
@@ -28,6 +31,7 @@
   top: 0;
   height: var(--card-h);
   border-radius: 2px;
+  isolation: isolate;
   background:
     radial-gradient(ellipse at 18% 10%, rgba(255,255,255,.46) 0%, rgba(255,255,255,0) 36%),
     radial-gradient(ellipse at 84% 92%, rgba(188,112,103,.18) 0%, rgba(188,112,103,0) 38%),
@@ -43,17 +47,8 @@
   overflow: hidden;
 }
 
-/* Only the base still needs its own stacking context, since its texture
-   layer uses mix-blend-mode. The covers no longer blend, so isolating them
-   is unnecessary — and isolation on an element inside a preserve-3d scene
-   is a known trigger for Safari falling back to flat z-index stacking
-   instead of true 3D depth sorting, which is what hides the cards behind
-   a rotated-open cover on iPhone specifically. */
-.base {
-  isolation: isolate;
-}
-
-.base::before {
+.base::before,
+.cover::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -67,30 +62,11 @@
   mix-blend-mode: multiply;
 }
 
-/*
-  The covers get a plain (non-blended) version of the same texture.
-  mix-blend-mode forces the browser to recompute this layer's compositing
-  every frame while the element is rotating in 3D — expensive on phones.
-  A flat low-opacity overlay reads almost the same at this scale, without
-  the per-frame blend cost during the fold animation.
-*/
-.cover::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: .3;
-  pointer-events: none;
-  background-image:
-    url("../assets/images/premium-paper-texture.png"),
-    linear-gradient(135deg, rgba(255,255,255,.12), rgba(130,70,68,.055));
-  background-size: cover, 100% 100%;
-  background-position: center;
-}
-
 .base {
   left: var(--cover-w);
   width: var(--card-w);
   z-index: 0;
+  overflow: visible;
 }
 
 .base::after {
@@ -103,11 +79,6 @@
     inset 0 12px 26px rgba(255,255,255,.12),
     inset 0 -10px 22px rgba(116,72,62,.045);
   pointer-events: none;
-}
-
-/* The base must not clip the cards; cards can rise naturally from the folder. */
-.base {
-  overflow: visible;
 }
 
 .base::before,
@@ -123,87 +94,72 @@
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
   transition: transform 1.58s var(--ease-fold);
-}
-
-/*
-  Landing shadow: a static box-shadow value on its own layer that only
-  fades opacity in/out. Opacity is compositor-only (no repaint), so this
-  gives the same "shadow appears as the cover settles open" look as
-  animating box-shadow directly, without the per-frame recalculation cost
-  of interpolating a box-shadow while the parent rotates in 3D.
-*/
-.cover::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity .5s ease;
-}
-
-.left-cover::after { box-shadow: -18px 18px 38px rgba(79,48,38,.15); }
-.right-cover::after { box-shadow: 18px 18px 38px rgba(79,48,38,.15); }
-
-.stage.is-open .cover::after { opacity: 1; }
-
-.stage.is-closing .cover::after {
-  transition-duration: .2s;
-}
-
-/* Promote to their own compositor layers only while actively animating,
-   so the fold doesn't stutter on its first frame — and release the
-   memory once settled instead of holding it permanently. */
-.stage.is-opening .folder-system,
-.stage.is-closing .folder-system,
-.stage.is-opening .cover,
-.stage.is-closing .cover {
   will-change: transform;
 }
 
 .left-cover {
   left: var(--cover-w);
   transform-origin: left center;
+  -webkit-transform: rotateY(0deg);
   transform: rotateY(0deg);
 }
 
 .right-cover {
   right: var(--cover-w);
   transform-origin: right center;
+  -webkit-transform: rotateY(0deg);
   transform: rotateY(0deg);
 }
 
-.stage.is-open .cover {
-  z-index: 2;
-}
-
 .stage.is-open .left-cover {
-  transform: rotateY(-178deg);
+  -webkit-transform: rotateY(-176deg);
+  transform: rotateY(-176deg);
+  box-shadow: -18px 18px 38px rgba(79,48,38,.15);
 }
 
 .stage.is-closing .cover {
   transition-duration: .82s;
 }
 
-.stage.is-open .right-cover {
-  transform: rotateY(178deg);
+/*
+  is-open stays on while the folder closes (see folder.js), so the cards
+  stay frozen. These overrides make the covers fold back shut anyway, tied
+  purely to is-closing, regardless of is-open still being present.
+*/
+.stage.is-closing .left-cover {
+  -webkit-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+  box-shadow: none;
 }
 
-/*
-  Safari-only fix: WebKit has a known performance bug where border-radius +
-  overflow:hidden on an element that's rotating in 3D forces it off the GPU
-  compositing path onto CPU rasterization every frame — this is the specific
-  reason the fold can be smooth on Android and janky on iPhone, since all
-  iOS browsers use WebKit under the hood. The 2px radius here is subtle
-  enough that dropping it on Safari only is a worthwhile trade for a smooth
-  animation. (-webkit-touch-callout is a Safari/iOS-only property, so this
-  block is invisible to Chrome/Android.)
-*/
-@supports (-webkit-touch-callout: none) {
-  .cover {
-    overflow: visible;
-    border-radius: 0;
-  }
+.stage.is-closing .right-cover {
+  -webkit-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+  box-shadow: none;
+}
+
+.stage.is-open .right-cover {
+  -webkit-transform: rotateY(176deg);
+  transform: rotateY(176deg);
+  box-shadow: 18px 18px 38px rgba(79,48,38,.15);
+}
+
+
+
+/* Closing must win over the open-cover transforms.
+   This is intentionally placed after the .stage.is-open .right-cover rule,
+   because the folder keeps is-open during closing so the cards stay physically
+   inside the folder until both covers have finished folding shut. */
+.stage.is-open.is-closing .left-cover {
+  -webkit-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+  box-shadow: none;
+}
+
+.stage.is-open.is-closing .right-cover {
+  -webkit-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+  box-shadow: none;
 }
 
 /* Full cover print is clipped into two halves by the covers. */
@@ -213,6 +169,8 @@
   width: var(--card-w);
   height: var(--card-h);
   pointer-events: none;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
 }
 
 .left-cover .cover-print { left: 0; }
@@ -227,23 +185,6 @@
   pointer-events: none;
 }
 
-.cover-title span {
-  display: block;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2.15rem, calc(var(--card-w) * 0.1146), 4.05rem);
-  font-weight: 500;
-  line-height: .9;
-  letter-spacing: .02em;
-}
-
-.cover-title small {
-  display: block;
-  margin-top: 12px;
-  font-size: .66rem;
-  letter-spacing: .28em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
 
 /* Image-based wax seal
    The seal is a real PNG asset, while the cover halves clip it so it still

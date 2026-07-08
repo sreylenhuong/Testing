@@ -54,8 +54,8 @@ button, a { font: inherit; }
   height: min(100svh, calc(var(--card-h) + 104px));
   display: grid;
   place-items: center;
+  -webkit-perspective: 1800px;
   perspective: 1800px;
-  touch-action: none;
 }
 
 
