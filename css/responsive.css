@@ -214,10 +214,10 @@
    Safari was glitching because several old @supports blocks were fighting:
    rotateY, opacity fades, scaleX folds, frozen cards, and delayed reveals.
    This block keeps one simple model on iPhone:
-   - Cards are rendered from the beginning, but sit behind covers.
+   - Cards become visible immediately when opening starts, but sit behind covers.
    - Covers slide open/closed as flat physical panels.
    - Card stack does not animate during cover movement.
-   - Cards stay rendered after closing; the closed covers conceal them.
+   - Cards are hidden only after both covers finish closing.
 ================================ */
 @supports (-webkit-touch-callout: none) {
   @media (max-width: 640px) {
@@ -243,11 +243,11 @@
 
     .card-stack {
       z-index: 4;
-      opacity: 1;
+      opacity: 0;
       pointer-events: none;
       -webkit-transform: translate3d(0, -10px, 0) scale(1);
       transform: translate3d(0, -10px, 0) scale(1);
-      transition: none;
+      transition: opacity .22s ease;
       will-change: auto;
     }
 
@@ -275,8 +275,8 @@
 
     /* Opening/ready state: cards are already inside, above the base, below covers. */
     .stage.is-opening .card-stack,
-    .stage.is-open:not(.is-ready) .card-stack,
-    .stage.is-closing .card-stack {
+    .stage.is-revealed .card-stack,
+    .stage.is-closing.is-open .card-stack {
       opacity: 1 !important;
       pointer-events: none !important;
       -webkit-transform: translate3d(0, -10px, 0) scale(1) !important;
@@ -284,12 +284,21 @@
       transition: none !important;
     }
 
-    .stage.is-ready:not(.is-closing) .card-stack {
+    .stage.is-ready.is-revealed:not(.is-closing) .card-stack {
       opacity: 1 !important;
       pointer-events: auto !important;
       -webkit-transform: translate3d(0, -10px, 0) scale(1) !important;
       transform: translate3d(0, -10px, 0) scale(1) !important;
       transition: none !important;
+    }
+
+    /* Close finished: only after is-open is removed should the cards disappear. */
+    .stage.is-closing:not(.is-open) .card-stack {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      -webkit-transform: translate3d(0, -10px, 0) scale(1) !important;
+      transform: translate3d(0, -10px, 0) scale(1) !important;
+      transition: opacity .16s ease !important;
     }
 
     /* iPhone open state: flat sliding panels instead of Safari 3D rotation. */

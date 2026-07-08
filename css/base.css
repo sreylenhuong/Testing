@@ -88,5 +88,4 @@ button:focus-visible,
 .seal-trigger:active,
 .seal-trigger:focus-visible {
   outline: none;
-  box-shadow: none;
 }

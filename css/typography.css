@@ -31,9 +31,6 @@ h2,
   letter-spacing: .02em;
   text-transform: uppercase;
   color: rgba(112, 82, 72, .34);
-  text-shadow:
-    0 1px 0 rgba(255,255,255,.72),
-    0 -1px 0 rgba(132, 96, 82, .12);
 }
 
 /* Card 1: quiet luxury, with no background tulip pattern. */
@@ -48,25 +45,6 @@ h2,
   z-index: 1;
 }
 
-.card.cover-card::before {
-  /* Keep only a very soft paper texture. The tulip pattern was removed because it competed with the layout. */
-  background-image:
-    linear-gradient(90deg, rgba(120, 90, 68, .018) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(120, 90, 68, .015) 1px, transparent 1px);
-  background-size: 18px 18px, 24px 24px;
-  opacity: .12;
-  mix-blend-mode: multiply;
-}
-
-.card.cover-card::after {
-  content: "";
-  position: absolute;
-  inset: clamp(10px, calc(var(--card-w) * 0.0366), 18px);
-  border: 1px solid rgba(207, 164, 125, .14);
-  pointer-events: none;
-}
-
-
 .card.cover-card .eyebrow {
   margin: 0 10px clamp(6px, calc(var(--card-w) * 0.0207), 12px);
   font-family: var(--font-serif);
@@ -75,7 +53,6 @@ h2,
   letter-spacing: .22em;
   text-transform: uppercase;
   color: rgba(184, 137, 115, .92);
-  text-shadow: 0 1px 0 rgba(255,255,255,.72);
   transform: translateY(clamp(-18px, -calc(var(--card-w) * 0.0488), -10px));
 }
 
@@ -98,7 +75,6 @@ h2,
   line-height: .78;
   color: rgba(69, 53, 47, .98);
   text-wrap: balance;
-  text-shadow: 0 1px 0 rgba(255,255,255,.72);
 }
 
 .rings-mark {
@@ -108,11 +84,6 @@ h2,
   opacity: .76;
   margin-top: clamp(12px, calc(var(--card-w) * 0.0402), 22px);
   margin-bottom: clamp(20px, calc(var(--card-w) * 0.0293), 15px);
-  filter:
-    sepia(.18)
-    saturate(.72)
-    opacity(.9)
-    drop-shadow(0 4px 6px rgba(81, 51, 42, .07));
 }
 
 .date-lockup {
@@ -163,7 +134,6 @@ h2,
   line-height: .86;
   letter-spacing: .02em;
   color: rgba(170, 116, 93, .88);
-  text-shadow: 0 1px 0 rgba(255,255,255,.72);
 }
 
 .date-year {
@@ -174,11 +144,7 @@ h2,
   line-height: 1;
   letter-spacing: .2em;
   color: rgba(170, 116, 93, .86);
-  text-shadow: 0 1px 0 rgba(255,255,255,.72);
 }
-
-
-
 
 /* Shared readable scale for Cards 2–6.
    These live in the base typography file so desktop and mobile inherit the same sizes.
@@ -212,8 +178,6 @@ h2,
   font-size: clamp(1.24rem, calc(var(--card-w) * 0.052), 1.4rem) !important;
 }
 
-
-
 .venue-location {
   font-size: clamp(.86rem, calc(var(--card-w) * 0.037), 1rem) !important;
   line-height: 1.2;
@@ -242,9 +206,7 @@ h2,
   line-height: 1;
   letter-spacing: .1em;
   color: var(--rose-gold);
-  text-shadow: 0 1px 0 rgba(255,255,255,.72);
 }
-
 
 /* Shared stationery signature: the CD monogram echoes the wax seal.
    It is centred with left/right: 0 + auto margins instead of translateX.
@@ -260,7 +222,6 @@ h2,
   opacity: .30;
   pointer-events: none;
   z-index: 1;
-  filter: drop-shadow(0 1px 0 rgba(255,255,255,.92));
 }
 
 .card.cover-card > .card-signature,

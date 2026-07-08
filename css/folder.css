@@ -38,28 +38,7 @@
     radial-gradient(ellipse at 50% 48%, rgba(255,255,255,.16) 0%, rgba(255,255,255,0) 48%),
     linear-gradient(180deg, #f8dfd8 0%, var(--folder-paper) 46%, var(--folder-paper-deep) 100%);
   border: 1px solid rgba(190, 132, 116, .36);
-  box-shadow:
-    0 24px 48px var(--shadow),
-    inset 0 1px 0 rgba(255,255,255,.54),
-    inset 0 -2px 3px rgba(138,76,69,.11),
-    inset 1px 0 0 rgba(255,255,255,.24),
-    inset -1px 0 0 rgba(138,76,69,.06);
   overflow: hidden;
-}
-
-.base::before,
-.cover::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: .52;
-  pointer-events: none;
-  background-image:
-    url("../assets/images/premium-paper-texture.png"),
-    linear-gradient(135deg, rgba(255,255,255,.12), rgba(130,70,68,.055));
-  background-size: cover, 100% 100%;
-  background-position: center;
-  mix-blend-mode: multiply;
 }
 
 .base {
@@ -67,23 +46,6 @@
   width: var(--card-w);
   z-index: 0;
   overflow: visible;
-}
-
-.base::after {
-  content: "";
-  position: absolute;
-  inset: 10px;
-  border: 1px solid rgba(190,132,116,.22);
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.28),
-    inset 0 12px 26px rgba(255,255,255,.12),
-    inset 0 -10px 22px rgba(116,72,62,.045);
-  pointer-events: none;
-}
-
-.base::before,
-.base::after {
-  border-radius: 2px;
 }
 
 .cover {
@@ -94,7 +56,6 @@
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
   transition: transform 1.58s var(--ease-fold);
-  will-change: transform;
 }
 
 .left-cover {
@@ -114,7 +75,6 @@
 .stage.is-open .left-cover {
   -webkit-transform: rotateY(-176deg);
   transform: rotateY(-176deg);
-  box-shadow: -18px 18px 38px rgba(79,48,38,.15);
 }
 
 .stage.is-closing .cover {
@@ -129,22 +89,17 @@
 .stage.is-closing .left-cover {
   -webkit-transform: rotateY(0deg);
   transform: rotateY(0deg);
-  box-shadow: none;
 }
 
 .stage.is-closing .right-cover {
   -webkit-transform: rotateY(0deg);
   transform: rotateY(0deg);
-  box-shadow: none;
 }
 
 .stage.is-open .right-cover {
   -webkit-transform: rotateY(176deg);
   transform: rotateY(176deg);
-  box-shadow: 18px 18px 38px rgba(79,48,38,.15);
 }
-
-
 
 /* Closing must win over the open-cover transforms.
    This is intentionally placed after the .stage.is-open .right-cover rule,
@@ -153,13 +108,11 @@
 .stage.is-open.is-closing .left-cover {
   -webkit-transform: rotateY(0deg);
   transform: rotateY(0deg);
-  box-shadow: none;
 }
 
 .stage.is-open.is-closing .right-cover {
   -webkit-transform: rotateY(0deg);
   transform: rotateY(0deg);
-  box-shadow: none;
 }
 
 /* Full cover print is clipped into two halves by the covers. */
@@ -185,7 +138,6 @@
   pointer-events: none;
 }
 
-
 /* Image-based wax seal
    The seal is a real PNG asset, while the cover halves clip it so it still
    behaves like it is physically attached to the folder. */
@@ -204,19 +156,6 @@
   height: 100%;
   display: block;
   object-fit: contain;
-  animation: sealSparkle 4.2s ease-in-out infinite;
-  filter:
-    drop-shadow(0 8px 12px rgba(92, 55, 48, .22))
-    drop-shadow(0 2px 3px rgba(255, 255, 255, .24));
-}
-
-.stage.is-opening .seal-print img,
-.stage.is-open .seal-print img {
-  animation: none;
-}
-
-.stage.is-closing .seal-print img {
-  animation: sealSparkle 4.2s ease-in-out infinite;
 }
 
 .seal-trigger {
